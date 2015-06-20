@@ -9,9 +9,19 @@
 import UIKit
 
 class FirstViewController: UIViewController {
+    
+    var count = 0
+    
+    @IBOutlet weak var countLabel: UILabel!
+   
+    @IBAction func incrementCount(sender: AnyObject) {
+        count++
+        countLabel.text = String(count)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        countLabel.text = String(count)
         // Do any additional setup after loading the view, typically from a nib.
     }
 
