@@ -29,6 +29,3 @@ Assuming your master fork remote is called 'upstream':
 * ```git merge upstream/master``` will merge the master forks master branch into your forks master branch
 * ```git push origin master``` will push those new merges up to **your** local fork
 * now you're ready to branch off your forks master branch, and develop your great new feature!
-
-testing slack integration
-
