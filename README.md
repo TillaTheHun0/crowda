@@ -30,4 +30,5 @@ Assuming your master fork remote is called 'upstream':
 * ```git push origin master``` will push those new merges up to **your** local fork
 * now you're ready to branch off your forks master branch, and develop your great new feature!
 
+testing slack integration
 
