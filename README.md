@@ -1,6 +1,9 @@
 # crowda
 Source for Crowda iOS Application
 
+#Git Info
+https://sites.google.com/a/sparcedge.com/sparc-qa/home/git-github
+
 ##How to fork this repo
 Typically, all individuals who wish to contribute will create his or her own fork on his or her own github account. 
 * hit the fork button in the top right of the repo screen
