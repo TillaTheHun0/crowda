@@ -1,4 +1,4 @@
-# crowda
+# crowda This is deprecated!
 Source for Crowda iOS Application
 
 #Git Info
