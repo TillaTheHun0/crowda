@@ -1,9 +1,19 @@
-angular.module('starter.services', [])
+angular.module('starter.services', ['firebase'])
+
+.factory('Firebase', ['$firebaseAuth', function($firebaseAuth){
+    var ref = new Firebase("https://crowda.firebaseio.com/");
+    return {
+      auth: function(){
+        return $firebaseAuth(ref);
+      },
+      connect: function(){
+        return ref;
+      }
+    }
+  }
+])
 
 .factory('Chats', function() {
-  // Might use a resource here that returns a JSON array
-
-  // Some fake testing data
   var chats = [{
     id: 0,
     name: 'Ben Sparrow',

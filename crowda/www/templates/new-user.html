@@ -1,0 +1,13 @@
+<ion-view view-title = "Create Account">
+  <ion-content class = "padding">
+    <div class = "list">
+      <label class="item item-input">
+        <input type="text" placeholder="Username" ng-model="email">
+      </label>
+      <label class="item item-input">
+        <input type="password" placeholder="Password" ng-model="password">
+      </label>
+      <button class="button button-block button-dark" ng-click="createUser(email, password)">Create</button>
+    </div>
+  </ion-content>
+</ion-view>

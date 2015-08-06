@@ -1,5 +1,46 @@
 angular.module('starter.controllers', [])
 
+.controller('LoginCtrl', ["$scope", "Firebase", "$state", function($scope, Firebase, $state, $ionicLoading){
+    function authHandler(error, authData){
+      if(error){
+        console.log("Could not log in user");
+      }
+      else{
+        console.log("logged in successfully with payload: " + authData.uid);
+        $state.go("tab.dash")
+      }
+    };
+
+    $scope.newuser = function(){
+      $state.go("newuser");
+    }
+
+    $scope.loginUser = function(email, password){
+      Firebase.connect().authWithPassword({
+        email: email,
+        password: password
+      }, authHandler);
+    };
+  }
+])
+
+.controller('NewUserCtrl', function($scope, Firebase, $state){
+    $scope.createUser = function(email, password){
+      $scope.message = null;
+      $scope.error = null;
+
+      Firebase.connect().createUser({
+          email: email,
+          password: password
+      }).then(function(UserData){
+        $scope.message = "Logged in with uid:  " + UserData.uid;
+        $state.go("tab.dash");
+      }).catch(function(error){
+        $scope.error = error;
+      })
+    };//end createUser
+})
+
 .controller('DashCtrl', function($scope) {})
 
 .controller('ChatsCtrl', function($scope, Chats) {
