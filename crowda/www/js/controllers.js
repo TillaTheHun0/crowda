@@ -1,45 +1,46 @@
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "Firebase", "$state", function($scope, Firebase, $state, $ionicLoading){
-    function authHandler(error, authData){
-      if(error){
-        console.log("Could not log in user");
-      }
-      else{
-        console.log("logged in successfully with payload: " + authData.uid);
-        $state.go("tab.dash")
-      }
-    };
+.controller('LoginCtrl', ["$scope", "Firebase", "$state", "$ionicLoading", "$ionicModal", function($scope, Firebase, $state, $ionicLoading, $ionicModal){
+
+    $ionicModal.fromTemplateUrl('templates/new-user.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
 
     $scope.newuser = function(){
       $state.go("newuser");
     }
 
     $scope.loginUser = function(email, password){
-      Firebase.connect().authWithPassword({
+      Firebase.auth().$authWithPassword({
         email: email,
         password: password
-      }, authHandler);
-    };
-  }
-])
+      }).then(function(authData) {
+          console.log("Logged in as:", authData.uid);
+          $state.go("tab.dash");
+      }).catch(function(error) {
+          console.error("Authentication failed:", error);
+        })
+      };
 
-.controller('NewUserCtrl', function($scope, Firebase, $state){
     $scope.createUser = function(email, password){
       $scope.message = null;
       $scope.error = null;
 
-      Firebase.connect().createUser({
+      Firebase.auth().$createUser({
           email: email,
           password: password
       }).then(function(UserData){
-        $scope.message = "Logged in with uid:  " + UserData.uid;
-        $state.go("tab.dash");
+        console.log("Created User with uid:  " + UserData.uid);
       }).catch(function(error){
-        $scope.error = error;
+        console.log(error);
       })
+      $scope.modal.hide();
     };//end createUser
-})
+  }
+])
 
 .controller('DashCtrl', function($scope) {})
 
