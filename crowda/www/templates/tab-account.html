@@ -1,4 +1,10 @@
 <ion-view view-title="Account">
+
+  <!-- nav bar button -->
+  <ion-nav-buttons side= "right">
+    <button class= "button button-clear" ng-click="logoutUser()">Logout</button>
+  </ion-nav-buttons>
+  
   <ion-content>
     <ion-list>
     <ion-toggle  ng-model="settings.enableFriends">

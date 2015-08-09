@@ -2,6 +2,19 @@ angular.module('starter.controllers', [])
 
 .controller('LoginCtrl', ["$scope", "Firebase", "$state", "$ionicLoading", "$ionicModal", function($scope, Firebase, $state, $ionicLoading, $ionicModal){
 
+    //ion spinner
+    function loading(){
+      $ionicLoading.show({
+        template: '<ion-spinner icon="spiral"></ion-spinner>',
+        hideOnStateChange: true
+      });
+    };
+
+    function hideLoading(){
+      $ionicLoading.hide();
+    }
+
+    //ionicModal
     $ionicModal.fromTemplateUrl('templates/new-user.html', {
       scope: $scope,
       animation: 'slide-in-up'
@@ -9,11 +22,8 @@ angular.module('starter.controllers', [])
       $scope.modal = modal;
     });
 
-    $scope.newuser = function(){
-      $state.go("newuser");
-    }
-
     $scope.loginUser = function(email, password){
+      loading();
       Firebase.auth().$authWithPassword({
         email: email,
         password: password
@@ -22,13 +32,15 @@ angular.module('starter.controllers', [])
           $state.go("tab.dash");
       }).catch(function(error) {
           console.error("Authentication failed:", error);
-        })
-      };
+          hideLoading();
+      })
+    };
 
     $scope.createUser = function(email, password){
+      //use these to display on login page later
       $scope.message = null;
       $scope.error = null;
-
+      loading();
       Firebase.auth().$createUser({
           email: email,
           password: password
@@ -38,7 +50,14 @@ angular.module('starter.controllers', [])
         console.log(error);
       })
       $scope.modal.hide();
+      hideLoading();
     };//end createUser
+
+    //not working. must implement onAuth callbacks
+    $scope.logoutUser = function(){
+      Firebase.auth().$unauth();
+    };
+
   }
 ])
 
