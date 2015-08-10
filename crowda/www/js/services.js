@@ -1,3 +1,4 @@
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.services', ['firebase'])
 
 .factory('Firebase', ['$firebaseAuth', function($firebaseAuth){
