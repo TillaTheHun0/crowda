@@ -1,13 +1,20 @@
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.services', ['firebase'])
 
 .factory('Firebase', ['$firebaseAuth', function($firebaseAuth){
     var ref = new Firebase("https://crowda.firebaseio.com/");
+    var firebaseAuth = $firebaseAuth(ref);
+    firebaseAuth.$onAuth(function(authData){
+      if(authData){
+        console.log("logged in as: " + authData.uid);
+      }
+      else{
+        console.log("logged out");
+      }
+    });
     return {
       auth: function(){
-        return $firebaseAuth(ref);
-      },
-      connect: function(){
-        return ref;
+        return firebaseAuth;
       }
     }
   }

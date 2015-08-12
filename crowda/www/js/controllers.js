@@ -1,7 +1,17 @@
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
 .controller('LoginCtrl', ["$scope", "Firebase", "$state", "$ionicLoading", "$ionicModal", function($scope, Firebase, $state, $ionicLoading, $ionicModal){
-
+    
+    $scope.userData = Firebase.auth().$getAuth();
+    
+    angular.element(document).ready(function(){
+      if($scope.userData){
+        loading();
+        //console.log("logged in as: " + $scope.userData.uid);
+        $state.go("tab.dash")
+      }
+    });
     //ion spinner
     function loading(){
       $ionicLoading.show({
@@ -28,7 +38,6 @@ angular.module('starter.controllers', [])
         email: email,
         password: password
       }).then(function(authData) {
-          console.log("Logged in as:", authData.uid);
           $state.go("tab.dash");
       }).catch(function(error) {
           console.error("Authentication failed:", error);
@@ -52,12 +61,6 @@ angular.module('starter.controllers', [])
       $scope.modal.hide();
       hideLoading();
     };//end createUser
-
-    //not working. must implement onAuth callbacks
-    $scope.logoutUser = function(){
-      Firebase.auth().$unauth();
-    };
-
   }
 ])
 
@@ -82,8 +85,14 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function(Firebase, $state, $scope) {
   $scope.settings = {
     enableFriends: true
   };
+  
+   $scope.logoutUser = function(){
+      Firebase.auth().$unauth();
+      $state.go("login");
+    };
+    
 });
