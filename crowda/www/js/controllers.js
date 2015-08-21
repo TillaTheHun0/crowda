@@ -12,6 +12,7 @@ angular.module('starter.controllers', [])
         $state.go("tab.dash")
       }
     });
+    
     //ion spinner
     function loading(){
       $ionicLoading.show({
