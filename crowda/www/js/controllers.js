@@ -8,7 +8,6 @@ angular.module('starter.controllers', [])
     angular.element(document).ready(function(){
       if($scope.userData){
         loading();
-        //console.log("logged in as: " + $scope.userData.uid);
         $state.go("tab.dash")
       }
     });
@@ -65,7 +64,20 @@ angular.module('starter.controllers', [])
   }
 ])
 
-.controller('DashCtrl', function($scope) {})
+.controller('DashCtrl', function($scope, $state) {
+  $scope.newEvent = function(){
+    $state.go('tab.new-event');
+  };
+})
+
+.controller('NewEventCtrl', function($scope, $state){
+  
+})
+
+.controller('AwesomeCtrl', function($scope){
+  $scope.name = "";
+  $scope.awesomeQuote = "Hello my name is " + $scope.name;
+})
 
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called

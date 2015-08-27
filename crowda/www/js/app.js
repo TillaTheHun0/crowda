@@ -55,6 +55,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
+  
+  .state('tab.awesome', {
+    url: '/awesome',
+    views: {
+      'tab-awesome': {
+        templateUrl: 'templates/awesome-detail.html',
+        controller: 'AwesomeCtrl'
+      }
+    }
+  })
+  
+  .state('tab.new-event', {
+    url: '/new-event',
+    views:{
+      'tab-dash':{
+        templateUrl: 'templates/new-event.html',
+        controller: 'NewEventCtrl'
+      }
+    }
+  })
 
   .state('tab.chats', {
       url: '/chats',
