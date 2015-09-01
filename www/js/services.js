@@ -1,28 +1,54 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.services', ['firebase'])
 
-.factory('Firebase', ['$firebaseAuth', function($firebaseAuth){
-    var ref = new Firebase("https://crowda.firebaseio.com/");
-    var firebaseAuth = $firebaseAuth(ref);
-    firebaseAuth.$onAuth(function(authData){
-      if(authData){
-        //setup user data here. May make super factory ie firebase endpoint service
-        console.log("logged in as: " + authData.uid);
-      }
-      else{
-        console.log("logged out");
-      }
-    });
-    return {
-      auth: function(){
-        return firebaseAuth;
-      }
-    }
+.factory('firebaseRef', ['$firebaseAuth', function($firebaseAuth){
+    return new Firebase("https://crowda.firebaseio.com/");
   }
 ])
 
-.factory('Events', function($firebaseAuth){
-  //factory for handling events for user. Will include full CRUD for events in backend
+.factory('firebaseAuth', function($firebaseAuth, firebaseRef){
+  var firebaseAuth = $firebaseAuth(firebaseRef);
+  var userData = {};
+  
+  //$onAuth listens for changes in authentication state
+  firebaseAuth.$onAuth(function(authData){
+    if(authData){
+      userData = authData//setup user data here. May make super factory ie firebase endpoint service
+      console.log("logged in as: " + userData.uid);
+    }
+    else{
+      console.log("logged out");
+    }
+  });
+  return{
+    getAuth: function(){
+      return firebaseAuth;
+    },
+    getUser: function(){
+      return userData;
+    },
+    unauth: function(){
+      firebaseAuth.$unauth();
+    }
+  }
+})
+
+.factory('Events', function($firebaseArray, firebaseRef){
+  /*
+  Schema for Event:
+  {
+    name: String,
+    location: {
+      long: num,
+      lat: num
+    },
+    date: date,
+    goal: currency,
+    current: currency,
+    attendees:[users], //will have to implement synchronized array methods here
+    url: String
+  }
+  */
  })
 
 .factory('Chats', function() {

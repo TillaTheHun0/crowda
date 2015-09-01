@@ -1,9 +1,9 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "Firebase", "$state", "$ionicLoading", "$ionicModal", function($scope, Firebase, $state, $ionicLoading, $ionicModal){
+.controller('LoginCtrl', ["$scope", "firebaseAuth", "$state", "$ionicLoading", "$ionicModal", function($scope, firebaseAuth, $state, $ionicLoading, $ionicModal){
     
-    $scope.userData = Firebase.auth().$getAuth();
+    $scope.userData = firebaseAuth.getAuth().$getAuth();
     
     angular.element(document).ready(function(){
       if($scope.userData){
@@ -31,10 +31,11 @@ angular.module('starter.controllers', [])
     }).then(function(modal) {
       $scope.modal = modal;
     });
-
+    	
+    //store username in factory maybe
     $scope.loginUser = function(email, password){
       loading();
-      Firebase.auth().$authWithPassword({
+      firebaseAuth.getAuth().$authWithPassword({
         email: email,
         password: password
       }).then(function(authData) {
@@ -50,7 +51,7 @@ angular.module('starter.controllers', [])
       $scope.message = null;
       $scope.error = null;
       loading();
-      Firebase.auth().$createUser({
+      firebaseAuth.getAuth().$createUser({
           email: email,
           password: password
       }).then(function(UserData){
@@ -74,11 +75,6 @@ angular.module('starter.controllers', [])
   
 })
 
-.controller('AwesomeCtrl', function($scope){
-  $scope.name = "";
-  $scope.awesomeQuote = "Hello my name is " + $scope.name;
-})
-
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -98,13 +94,13 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function(Firebase, $state, $scope) {
+.controller('AccountCtrl', function(firebaseAuth, $state, $scope) {
   $scope.settings = {
     enableFriends: true
   };
   
    $scope.logoutUser = function(){
-      Firebase.auth().$unauth();
+      firebaseAuth.unauth();
       $state.go("login");
     };
     
