@@ -1,7 +1,7 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "firebaseAuth", "$state", "$ionicLoading", "$ionicModal", function($scope, firebaseAuth, $state, $ionicLoading, $ionicModal){
+.controller('LoginCtrl', ["$scope", "firebaseAuth", "firebaseRef", "$state", "$ionicLoading", "$ionicModal", function($scope, firebaseAuth, firebaseRef, $state, $ionicLoading, $ionicModal){
     
     $scope.userData = firebaseAuth.getAuth().$getAuth();
     
@@ -56,6 +56,9 @@ angular.module('starter.controllers', [])
           password: password
       }).then(function(UserData){
         console.log("Created User with uid:  " + UserData.uid);
+        firebaseRef.child("users").child(UserData.uid).set({
+          email: email
+        });
       }).catch(function(error){
         console.log(error);
       })
