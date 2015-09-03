@@ -1,14 +1,13 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "Firebase", "$state", "$ionicLoading", "$ionicModal", function($scope, Firebase, $state, $ionicLoading, $ionicModal){
+.controller('LoginCtrl', ["$scope", "firebaseAuth", "firebaseRef", "$state", "$ionicLoading", "$ionicModal", function($scope, firebaseAuth, firebaseRef, $state, $ionicLoading, $ionicModal){
     
-    $scope.userData = Firebase.auth().$getAuth();
+    $scope.userData = firebaseAuth.getAuth().$getAuth();
     
     angular.element(document).ready(function(){
       if($scope.userData){
         loading();
-        //console.log("logged in as: " + $scope.userData.uid);
         $state.go("tab.dash")
       }
     });
@@ -32,10 +31,11 @@ angular.module('starter.controllers', [])
     }).then(function(modal) {
       $scope.modal = modal;
     });
-
+    	
+    //store username in factory maybe
     $scope.loginUser = function(email, password){
       loading();
-      Firebase.auth().$authWithPassword({
+      firebaseAuth.getAuth().$authWithPassword({
         email: email,
         password: password
       }).then(function(authData) {
@@ -51,11 +51,15 @@ angular.module('starter.controllers', [])
       $scope.message = null;
       $scope.error = null;
       loading();
-      Firebase.auth().$createUser({
+      firebaseAuth.getAuth().$createUser({
           email: email,
           password: password
       }).then(function(UserData){
         console.log("Created User with uid:  " + UserData.uid);
+        firebaseRef.child("users").child(UserData.uid).set({
+          //more data later
+          email: email
+        });
       }).catch(function(error){
         console.log(error);
       })
@@ -65,7 +69,32 @@ angular.module('starter.controllers', [])
   }
 ])
 
-.controller('DashCtrl', function($scope) {})
+.controller('DashCtrl', function($scope, $state) {
+  $scope.newEvent = function(){
+    $state.go('tab.new-event');
+  };
+  
+  
+})
+
+.controller('NewEventCtrl', function($scope, $state, firebaseRef, $ionicModal){
+  
+  $scope.location=false;
+  
+  $scope.cancel= function(){
+    $state.go("tab.dash");
+  };
+  
+  $scope.createCrowd = function(){
+    
+  };
+  
+  $scope.addLocation = function(){
+    //open modal for adding location
+    $scope.location=!$scope.location;
+  };
+  
+})
 
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
@@ -86,13 +115,13 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function(Firebase, $state, $scope) {
+.controller('AccountCtrl', function(firebaseAuth, $state, $scope) {
   $scope.settings = {
     enableFriends: true
   };
   
    $scope.logoutUser = function(){
-      Firebase.auth().$unauth();
+      firebaseAuth.unauth();
       $state.go("login");
     };
     
