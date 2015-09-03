@@ -33,11 +33,12 @@ angular.module('starter.services', ['firebase'])
   }
 })
 
-.factory('Events', function($firebaseArray, firebaseRef){
+.factory('Events', function($firebaseArray, firebaseRef){ //grab events for current user. Maybe use to see ther users events?
   /*
   Schema for Event:
   {
     name: String,
+    img: image,
     location: {
       long: num,
       lat: num
@@ -49,6 +50,54 @@ angular.module('starter.services', ['firebase'])
     url: String
   }
   */
+  var events = [
+    {
+      name: 'Team outing to Velocity Air Sports',
+      img: 'http://www.velocityairsports.com/images/VelocityAirSports_logo.jpg',//user would upload image
+      location:{//probably wont need to use this rn
+        long: 123,
+        lat:321
+      },
+      date: "08/25/15 7:00 PM EST",//could be date object instead.
+      goal: 250,
+      current: 120,
+      attendees: ['bruce@gmail.com', 'tyler@mail.com'], //could be usernames later
+      url: 'http://giphy.com/search/nicholas-cage' //url to event page
+    },
+    {
+      name: 'Movies',
+      img: 'http://static.boydgaming.net/samstownlv10/media/gallery/ST_Entertain-Movie_Theater-375347-full.jpg',
+      location:{//probably wont need to use this rn
+        long: 123,
+        lat:321
+      },
+      date: "09/16/15 10:00 PM EST",//could be date object instead.
+      goal: 75,
+      current: 16,
+      attendees: ['bruce@gmail.com', 'malin@gmail.com'], //could be usernames later
+      url: 'http://giphy.com/search/nicholas-cage' //url to event page
+    },
+    {
+      name: 'Bonaroo',
+      img: 'http://www.bonnaroo.com/sites/default/files/content-files/images/broo-fb.jpg?123',
+      location:{//probably wont need to use this rn
+        long: 123,
+        lat:321
+      },
+      date: "06/24/16 7:00 PM EST",//could be date object instead.
+      goal: 400,
+      current: 66,
+      attendees: ['bruce@gmail.com', 'malin@gmail.com'], //could be usernames later
+      url: 'http://giphy.com/search/nicholas-cage' //url to event page
+    }
+  ];
+  
+  return { //will actually be wrappers of firebase calls, but for now this will work
+    get: function(){
+      return events;
+    }
+    //CRUD
+  }
  })
 
 .factory('Chats', function() {

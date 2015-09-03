@@ -57,6 +57,7 @@ angular.module('starter.controllers', [])
       }).then(function(UserData){
         console.log("Created User with uid:  " + UserData.uid);
         firebaseRef.child("users").child(UserData.uid).set({
+          //more data later
           email: email
         });
       }).catch(function(error){
@@ -72,9 +73,26 @@ angular.module('starter.controllers', [])
   $scope.newEvent = function(){
     $state.go('tab.new-event');
   };
+  
+  
 })
 
-.controller('NewEventCtrl', function($scope, $state){
+.controller('NewEventCtrl', function($scope, $state, firebaseRef, $ionicModal){
+  
+  $scope.location=false;
+  
+  $scope.cancel= function(){
+    $state.go("tab.dash");
+  };
+  
+  $scope.createCrowd = function(){
+    
+  };
+  
+  $scope.addLocation = function(){
+    //open modal for adding location
+    $scope.location=!$scope.location;
+  };
   
 })
 

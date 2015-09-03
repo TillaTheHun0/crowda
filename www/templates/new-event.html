@@ -1,5 +1,25 @@
-<ion-view view-title="Event">
+<ion-view view-title="New Crowd" hide-back-button="true">
+	
+	<ion-nav-buttons side="primary"s>
+		<button class="button button-clear" ng-click="cancel()">Cancel</button>
+	</ion-nav-buttons>
+	
 	<ion-content>
-		woop woop	
-	</ion-content>	
+		<div class="list">
+			<div class="item item-input">
+				<input type="text" placeholder="Crowd Name">
+			</div>
+			<div class="item item-divider"></div>
+			<div class="item item-icon-left" ng-click="addLocation()">
+				<i class="icon" ng-class="{'ion-ios-navigate-outline': !location, 'ion-ios-navigate': location}"></i>
+				Add Location
+			</div>
+		</div>
+	</ion-content>
+	
+	<ion-footer-bar class="bar-dark">
+		<button class="bar bar-footer bar-dark" ng-click="createCrowd()">
+			<div class="title">Create</div>
+		</button>
+	</ion-footer-bar>	
 </ion-view>
