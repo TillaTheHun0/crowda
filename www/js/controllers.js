@@ -48,8 +48,7 @@ angular.module('starter.controllers', [])
 
     $scope.createUser = function(email, password){
       //use these to display on login page later
-      $scope.message = null;
-      $scope.error = null;
+      $scope.error = false;
       loading();
       firebaseAuth.getAuth().$createUser({
           email: email,
@@ -60,11 +59,13 @@ angular.module('starter.controllers', [])
           //more data later
           email: email
         });
+        hideLoading();
+        $scope.modal.hide();
       }).catch(function(error){
+        $scope.error=true;
         console.log(error);
+        hideLoading();
       })
-      $scope.modal.hide();
-      hideLoading();
     };//end createUser
   }
 ])
@@ -73,13 +74,21 @@ angular.module('starter.controllers', [])
   $scope.newEvent = function(){
     $state.go('tab.new-event');
   };
-  
-  
 })
 
-.controller('NewEventCtrl', function($scope, $state, firebaseRef, $ionicModal){
-  
+.controller('NewEventCtrl', function($scope, $state, firebaseRef, firebaseAuth, $ionicModal){
   $scope.location=false;
+  
+  $scope.invitees=[];
+  $scope.friendQuery=[];
+  
+  $scope.addUser = function(user){
+    $scope.invitees.push(user);
+  }
+  
+  $scope.getFriends = function(){
+    //firebaseArrays  
+  };
   
   $scope.cancel= function(){
     $state.go("tab.dash");
@@ -115,7 +124,7 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function(firebaseAuth, $state, $scope) {
+.controller('AccountCtrl', function(Friends, firebaseAuth, $state, $scope) {
   $scope.settings = {
     enableFriends: true
   };
@@ -125,4 +134,6 @@ angular.module('starter.controllers', [])
       $state.go("login");
     };
     
+   $scope.friends = Friends;
+   console.log($scope.friends);
 });
