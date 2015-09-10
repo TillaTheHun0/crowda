@@ -33,6 +33,10 @@ angular.module('starter.services', ['firebase'])
   }
 })
 
+.factory('Friends', function(firebaseRef, $firebaseArray, firebaseAuth){
+  return $firebaseArray(firebaseRef.child('users').child(firebaseAuth.getUser().uid).child('friends'));
+})
+
 .factory('Events', function($firebaseArray, firebaseRef){ //grab events for current user. Maybe use to see ther users events?
   /*
   Schema for Event:

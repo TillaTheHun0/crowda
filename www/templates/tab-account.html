@@ -7,9 +7,12 @@
   
   <ion-content>
     <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
-    </ion-toggle>
+      <ion-toggle  ng-model="settings.enableFriends">
+          Enable Friends
+      </ion-toggle>
+      <ion-item ng-repeat="friend in friends">
+        {{friend.$value}}
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>
