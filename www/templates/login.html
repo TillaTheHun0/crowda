@@ -22,12 +22,16 @@
     <ion-content class = "padding">
       <div class = "list">
         <label class="item item-input">
-          <input type="text" placeholder="Username" ng-model="email">
+          <input type="text" placeholder="Username" ng-model="username">
+        </label>
+        <label class="item item-divider"></label>
+        <label class="item item-input">
+          <input type="text" placeholder="Email" ng-model="email">
         </label>
         <label class="item item-input">
           <input type="password" placeholder="Password" ng-model="password">
         </label>
-        <button class="button button-block button-dark" ng-click="createUser(email, password)">Create</button>
+        <button class="button button-block button-dark" ng-click="createUser(email, username, password)">Create</button>
       </div>
     </ion-content>
   </ion-modal-view>

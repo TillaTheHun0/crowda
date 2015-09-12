@@ -3,9 +3,8 @@ angular.module('starter.controllers', [])
 
 .controller('LoginCtrl', ["$scope", "firebaseAuth", "firebaseRef", "$state", "$ionicLoading", "$ionicModal", function($scope, firebaseAuth, firebaseRef, $state, $ionicLoading, $ionicModal){
     
-    $scope.userData = firebaseAuth.getAuth().$getAuth();
-    
     angular.element(document).ready(function(){
+      $scope.userData = firebaseAuth.getAuth().$getAuth();
       if($scope.userData){
         loading();
         $state.go("tab.dash")
@@ -31,8 +30,35 @@ angular.module('starter.controllers', [])
     }).then(function(modal) {
       $scope.modal = modal;
     });
+    
+    function escapeEmail(email){
+      return email.replace('.', ',');
+      console.log("email parsed")
+    };
+    
+    function goToDash(error){
+      console.log("done");
+      hideLoading();
+      $scope.modal.hide();
+      $state.go('tab.dash');
+    }
+    
+    function claimUsername(auth, username){
+      firebaseRef.child('username_lookup').child(username).set(auth.uid, function(error){
+         if(error){
+           console.log("Username failed");
+         }
+         else{
+           console.log("Username success");
+           firebaseRef.child('users').child(auth.uid).set({
+              email: escapeEmail(auth.password.email),
+              provider: auth.provider,
+              username: username
+            }, goToDash(error))
+         }
+      });
+    };
     	
-    //store username in factory maybe
     $scope.loginUser = function(email, password){
       loading();
       firebaseAuth.getAuth().$authWithPassword({
@@ -46,24 +72,21 @@ angular.module('starter.controllers', [])
       })
     };
 
-    $scope.createUser = function(email, password){
-      //use these to display on login page later
-      $scope.error = false;
+    $scope.createUser = function(email, username, password){
       loading();
       firebaseAuth.getAuth().$createUser({
+        email: email,
+        password: password
+      }).then(function(auth){
+        console.log("Created user with uid: " + auth.uid);
+        firebaseAuth.getAuth().$authWithPassword({
           email: email,
           password: password
-      }).then(function(UserData){
-        console.log("Created User with uid:  " + UserData.uid);
-        firebaseRef.child("users").child(UserData.uid).set({
-          //more data later
-          email: email
-        });
-        hideLoading();
-        $scope.modal.hide();
+        }).then(function(auth){
+          claimUsername(auth, username);
+        })
       }).catch(function(error){
-        $scope.error=true;
-        console.log(error);
+        $scope.emailTaken = true;
         hideLoading();
       })
     };//end createUser
