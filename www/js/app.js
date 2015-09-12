@@ -45,6 +45,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     templateUrl: 'templates/login.html',
     controller: 'LoginCtrl'
   })
+  
+  .state('new-user', {
+    url: '/new-user',
+    templateUrl: 'templates/new-user.html',
+    controller: 'NewUserCtrl'
+  })
 
   .state('tab.dash', {
     url: '/dash',

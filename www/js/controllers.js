@@ -1,27 +1,15 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "firebaseAuth", "firebaseRef", "$state", "$ionicLoading", "$ionicModal", function($scope, firebaseAuth, firebaseRef, $state, $ionicLoading, $ionicModal){
+.controller('LoginCtrl', ["$scope", "firebaseAuth", "firebaseRef", "Spinner", "$state", "$ionicModal", function($scope, firebaseAuth, firebaseRef, Spinner, $state, $ionicModal){
     
     angular.element(document).ready(function(){
       $scope.userData = firebaseAuth.getAuth().$getAuth();
       if($scope.userData){
-        loading();
+        Spinner.loading();
         $state.go("tab.dash")
       }
     });
-    
-    //ion spinner
-    function loading(){
-      $ionicLoading.show({
-        template: '<ion-spinner icon="spiral"></ion-spinner>',
-        hideOnStateChange: true
-      });
-    };
-
-    function hideLoading(){
-      $ionicLoading.hide();
-    }
 
     //ionicModal
     $ionicModal.fromTemplateUrl('templates/new-user.html', {
@@ -31,36 +19,20 @@ angular.module('starter.controllers', [])
       $scope.modal = modal;
     });
     
-    function escapeEmail(email){
-      return email.replace('.', ',');
-      console.log("email parsed")
-    };
     
     function goToDash(error){
       console.log("done");
-      hideLoading();
+      Spinner.hideLoading();
       $scope.modal.hide();
       $state.go('tab.dash');
-    }
-    
-    function claimUsername(auth, username){
-      firebaseRef.child('username_lookup').child(username).set(auth.uid, function(error){
-         if(error){
-           console.log("Username failed");
-         }
-         else{
-           console.log("Username success");
-           firebaseRef.child('users').child(auth.uid).set({
-              email: escapeEmail(auth.password.email),
-              provider: auth.provider,
-              username: username
-            }, goToDash(error))
-         }
-      });
     };
-    	
+    
+    $scope.newUser = function(){
+      $state.go('new-user');
+    };
+    	  
     $scope.loginUser = function(email, password){
-      loading();
+      Spinner.loading();
       firebaseAuth.getAuth().$authWithPassword({
         email: email,
         password: password
@@ -68,12 +40,28 @@ angular.module('starter.controllers', [])
           $state.go("tab.dash");
       }).catch(function(error) {
           console.error("Authentication failed:", error);
-          hideLoading();
+          Spinner.hideLoading();
       })
     };
+    
+  }
+])
 
+.controller('NewUserCtrl', function($scope, $state, firebaseRef, firebaseAuth, Spinner, $ionicModal){
+  
+    $ionicModal.fromTemplateUrl('templates/username.html', {
+      scope: $scope,
+      animation: 'zoomInUp',   
+    }).then(function(modal){
+      $scope.modal = modal;
+    })
+  
+    function escapeEmail(email){
+      return email.replace('.', ',');
+    };
+    
     $scope.createUser = function(email, username, password){
-      loading();
+      Spinner.loading();
       firebaseAuth.getAuth().$createUser({
         email: email,
         password: password
@@ -83,15 +71,35 @@ angular.module('starter.controllers', [])
           email: email,
           password: password
         }).then(function(auth){
-          claimUsername(auth, username);
+          //pop up modal for user name here
+          Spinner.hideLoading();
+          $scope.modal.show();
         })
       }).catch(function(error){
         $scope.emailTaken = true;
-        hideLoading();
+        Spinner.hideLoading();
       })
     };//end createUser
-  }
-])
+    
+    $scope.addUser = function(username){
+      var auth = firebaseAuth.getUser();
+      firebaseRef.child('username_lookup').child(username).set(auth.uid, function(error){
+        if(error){
+          $scope.usernameTaken = true;
+        }
+        else{
+          firebaseRef.child('users').child(auth.uid).set({
+            username: username,
+            provider: firebaseAuth.getUser().provider,
+            email: escapeEmail(firebaseAuth.getUser().password.email)
+          }, function(){
+            $scope.modal.hide();
+            $state.go('tab.dash');
+          })
+        }
+      })
+    }
+})
 
 .controller('DashCtrl', function($scope, $state) {
   $scope.newEvent = function(){

@@ -1,0 +1,30 @@
+<ion-view view-title="New Account">
+  <ion-content class = "padding">
+    <div class = "list">
+      <label class="item item-input">
+        <input type="text" placeholder="Email" ng-model="email">
+      </label>
+      <label class="item item-input">
+        <input type="password" placeholder="Password" ng-model="password">
+      </label>
+      <button class="button button-block button-dark" ng-click="createUser(email, username, password)">Create</button>
+    </div>
+    <p ng-show="emailTaken">Email is already in use</p>
+    <p ng-show="usernameTaken">Username is already in user</p>
+  </ion-content>
+</ion-view>
+
+<script id="templates/username.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-dark">
+      <h1 class="title">Username</h1>
+    </ion-header-bar>
+    <ion-content class = "padding">
+      <label class="item item-input">
+        <input type="text" placeholder="Username" ng-model="username">
+      </label>
+      <button class="button button-block button-dark" ng-click="addUser(username)">Submit</button>
+      <p ng-show="usernameTaken">Username is already in use</p>
+    </ion-content>
+  </ion-modal-view>
+</script>
