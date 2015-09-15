@@ -33,6 +33,25 @@ angular.module('starter.services', ['firebase'])
   }
 })
 
+.factory('Spinner', ['$ionicLoading', function($ionicLoading){   
+    return {
+      loading: function(){
+        $ionicLoading.show({
+          template: '<ion-spinner icon="spiral"></ion-spinner>',
+          hideOnStateChange: true
+        });
+      },
+      
+      hideLoading: function(){
+        $ionicLoading.hide();
+      }
+    }
+}])
+
+.factory('Friends', function(firebaseRef, $firebaseArray, firebaseAuth){
+  return $firebaseArray(firebaseRef.child('users').child(firebaseAuth.getUser().uid).child('friends'));
+})
+
 .factory('Events', function($firebaseArray, firebaseRef){ //grab events for current user. Maybe use to see ther users events?
   /*
   Schema for Event:

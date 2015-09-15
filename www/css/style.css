@@ -1,1 +1,26 @@
 /* Empty. Add your own CSS if you like */
+.fade{
+	/* complete liquid height based on the parent's height!! */
+    height:100%;
+    position: relative;
+    /* only transition on transform properties which are hardware accelerated = way better performances */
+	-webkit-transition:-webkit-transform .2s ease;
+     -moz-transition:   -moz-transform .2s ease;
+      -ms-transition:    -ms-transform .2s ease;
+          transition:        transform .2s ease;
+}
+.fade.ng-hide{
+      /* visible */
+    -webkit-transform: translate(0, 0%);
+       -moz-transform: translate(0, 0%);
+        -ms-transform: translate(0, 0%);
+            transform: translate(0, 0%);
+}
+
+.fade.ng-hide-remove{
+  /* completely offscreen */
+    -webkit-transform: translate(0, -100%);
+       -moz-transform: translate(0, -100%);
+        -ms-transform: translate(0, -100%);
+            transform: translate(0, -100%);
+}

@@ -14,12 +14,28 @@
 				<i class="icon" ng-class="{'ion-ios-navigate-outline': !location, 'ion-ios-navigate': location}"></i>
 				Add Location
 			</div>
+			<div class="item item-divider"></div>
+			<div class="item item-input">
+				<textarea placeholder="Description"></textarea>
+			</div>
+			<div class="item item-divider"></div>
+			<div class="item item-icon-left" ng-click="invite = !invite">
+				<i class="icon ion-person-stalker"></i>	
+				Invite Friends		
+			</div>
+			<div class="item item-input" ng-show="invite">
+				<input type="text" placeholder="Username..." ng-model="invitee" ng-change="getUsers(invitee)">
+			</div>
+			<div class="item item-avatar" ng-repeat="friend in friendQuery">
+				<img ng-src="">
+				<p>{{friend.name}}</p>
+			</div>	
 		</div>
 	</ion-content>
 	
 	<ion-footer-bar class="bar-dark">
-		<button class="bar bar-footer bar-dark" ng-click="createCrowd()">
-			<div class="title">Create</div>
+		<button class="button button-clear bar bar-dark" ng-click="createCrowd()">
+			Create
 		</button>
 	</ion-footer-bar>	
 </ion-view>

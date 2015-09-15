@@ -1,28 +1,15 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "firebaseAuth", "firebaseRef", "$state", "$ionicLoading", "$ionicModal", function($scope, firebaseAuth, firebaseRef, $state, $ionicLoading, $ionicModal){
-    
-    $scope.userData = firebaseAuth.getAuth().$getAuth();
+.controller('LoginCtrl', ["$scope", "firebaseAuth", "firebaseRef", "Spinner", "$state", "$ionicModal", function($scope, firebaseAuth, firebaseRef, Spinner, $state, $ionicModal){
     
     angular.element(document).ready(function(){
+      $scope.userData = firebaseAuth.getAuth().$getAuth();
       if($scope.userData){
-        loading();
+        Spinner.loading();
         $state.go("tab.dash")
       }
     });
-    
-    //ion spinner
-    function loading(){
-      $ionicLoading.show({
-        template: '<ion-spinner icon="spiral"></ion-spinner>',
-        hideOnStateChange: true
-      });
-    };
-
-    function hideLoading(){
-      $ionicLoading.hide();
-    }
 
     //ionicModal
     $ionicModal.fromTemplateUrl('templates/new-user.html', {
@@ -31,10 +18,21 @@ angular.module('starter.controllers', [])
     }).then(function(modal) {
       $scope.modal = modal;
     });
-    	
-    //store username in factory maybe
+    
+    
+    function goToDash(error){
+      console.log("done");
+      Spinner.hideLoading();
+      $scope.modal.hide();
+      $state.go('tab.dash');
+    };
+    
+    $scope.newUser = function(){
+      $state.go('new-user');
+    };
+    	  
     $scope.loginUser = function(email, password){
-      loading();
+      Spinner.loading();
       firebaseAuth.getAuth().$authWithPassword({
         email: email,
         password: password
@@ -42,44 +40,86 @@ angular.module('starter.controllers', [])
           $state.go("tab.dash");
       }).catch(function(error) {
           console.error("Authentication failed:", error);
-          hideLoading();
+          Spinner.hideLoading();
       })
     };
-
-    $scope.createUser = function(email, password){
-      //use these to display on login page later
-      $scope.message = null;
-      $scope.error = null;
-      loading();
-      firebaseAuth.getAuth().$createUser({
-          email: email,
-          password: password
-      }).then(function(UserData){
-        console.log("Created User with uid:  " + UserData.uid);
-        firebaseRef.child("users").child(UserData.uid).set({
-          //more data later
-          email: email
-        });
-      }).catch(function(error){
-        console.log(error);
-      })
-      $scope.modal.hide();
-      hideLoading();
-    };//end createUser
+    
   }
 ])
+
+.controller('NewUserCtrl', function($scope, $state, firebaseRef, firebaseAuth, Spinner, $ionicModal){
+  
+    $ionicModal.fromTemplateUrl('templates/username.html', {
+      scope: $scope,
+      animation: 'zoomInUp',   
+    }).then(function(modal){
+      $scope.modal = modal;
+    })
+  
+    function escapeEmail(email){
+      return email.replace('.', ',');
+    };
+    
+    $scope.createUser = function(email, username, password){
+      Spinner.loading();
+      firebaseAuth.getAuth().$createUser({
+        email: email,
+        password: password
+      }).then(function(auth){
+        console.log("Created user with uid: " + auth.uid);
+        firebaseAuth.getAuth().$authWithPassword({
+          email: email,
+          password: password
+        }).then(function(auth){
+          //pop up modal for user name here
+          Spinner.hideLoading();
+          $scope.modal.show();
+        })
+      }).catch(function(error){
+        $scope.emailTaken = true;
+        Spinner.hideLoading();
+      })
+    };//end createUser
+    
+    $scope.addUser = function(username){
+      var auth = firebaseAuth.getUser();
+      firebaseRef.child('username_lookup').child(username).set(auth.uid, function(error){
+        if(error){
+          $scope.usernameTaken = true;
+        }
+        else{
+          firebaseRef.child('users').child(auth.uid).set({
+            username: username,
+            provider: firebaseAuth.getUser().provider,
+            email: escapeEmail(firebaseAuth.getUser().password.email)
+          }, function(){
+            $scope.modal.hide();
+            $state.go('tab.dash');
+          })
+        }
+      })
+    }
+})
 
 .controller('DashCtrl', function($scope, $state) {
   $scope.newEvent = function(){
     $state.go('tab.new-event');
   };
-  
-  
 })
 
-.controller('NewEventCtrl', function($scope, $state, firebaseRef, $ionicModal){
-  
+.controller('NewEventCtrl', function($scope, $state, firebaseRef, firebaseAuth, $ionicModal){
   $scope.location=false;
+  
+  $scope.invitees=[];
+  $scope.friendQuery=[];
+  
+  $scope.addUser = function(user){
+    $scope.invitees.push(user);
+  }
+  
+  $scope.getFriends = function(){
+    //firebaseArrays  
+  };
   
   $scope.cancel= function(){
     $state.go("tab.dash");
@@ -115,7 +155,7 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function(firebaseAuth, $state, $scope) {
+.controller('AccountCtrl', function(Friends, firebaseAuth, $state, $scope) {
   $scope.settings = {
     enableFriends: true
   };
@@ -125,4 +165,6 @@ angular.module('starter.controllers', [])
       $state.go("login");
     };
     
+   $scope.friends = Friends;
+   console.log($scope.friends);
 });
