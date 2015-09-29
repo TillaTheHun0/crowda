@@ -71,16 +71,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     }
   })
-  
-  .state('tab.add-location', {
-    url: '/add-location',
-    views:{
-      'tab-dash':{
-        templateUrl: 'templates/add-location.html',
-        controller: 'AddLocationCtrl'
-      }
-    }
-  })
 
   .state('tab.chats', {
       url: '/chats',
