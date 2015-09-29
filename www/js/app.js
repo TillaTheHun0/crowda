@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'firebase'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -68,6 +68,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       'tab-dash':{
         templateUrl: 'templates/new-event.html',
         controller: 'NewEventCtrl'
+      }
+    }
+  })
+  
+  .state('tab.add-location', {
+    url: '/add-location',
+    views:{
+      'tab-dash':{
+        templateUrl: 'templates/add-location.html',
+        controller: 'AddLocationCtrl'
       }
     }
   })
