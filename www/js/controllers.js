@@ -1,7 +1,8 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "firebaseAuth", "firebaseRef", "Spinner", "$state", "$ionicModal", "Auth", function($scope, firebaseAuth, firebaseRef, Spinner, $state, $ionicModal, Auth){
+.controller('LoginCtrl', ["$scope", "firebaseAuth", "Spinner", "$state", "$ionicModal", "Auth", 
+  function($scope, firebaseAuth, Spinner, $state, $ionicModal, Auth){
     
     angular.element(document).ready(function(){
       $scope.userData = firebaseAuth.getAuth().$getAuth();
@@ -59,7 +60,7 @@ angular.module('starter.controllers', [])
   }
 ])
 
-.controller('NewUserCtrl', function($scope, $state, firebaseRef, firebaseAuth, Spinner, $ionicModal, Auth){
+.controller('NewUserCtrl', function($scope, $state, Spinner, $ionicModal, Auth){
     
     $ionicModal.fromTemplateUrl('templates/username.html', {
       scope: $scope,
@@ -84,47 +85,6 @@ angular.module('starter.controllers', [])
           $scope.errorMes = httpResponse.data.error;
           $scope.error = true
         })
-    }
-    
-    // //TODO: reqrite all of this
-    // $scope.createUser = function(email, username, password){
-    //   Spinner.loading();
-    //   firebaseAuth.getAuth().$createUser({
-    //     email: email,
-    //     password: password
-    //   }).then(function(auth){
-    //     console.log("Created user with uid: " + auth.uid);
-    //     firebaseAuth.getAuth().$authWithPassword({
-    //       email: email,
-    //       password: password
-    //     }).then(function(auth){
-    //       //pop up modal for user name here
-    //       Spinner.hideLoading();
-    //       $scope.modal.show();
-    //     })
-    //   }).catch(function(error){
-    //     $scope.emailTaken = true;
-    //     Spinner.hideLoading();
-    //   })
-    // };//end createUser
-    
-    $scope.addUser = function(username){
-      var auth = firebaseAuth.getUser();
-      firebaseRef.child('username_lookup').child(username).set(auth.uid, function(error){
-        if(error){
-          $scope.usernameTaken = true;
-        }
-        else{
-          firebaseRef.child('users').child(auth.uid).set({
-            username: username,
-            provider: firebaseAuth.getUser().provider,
-            email: escapeEmail(firebaseAuth.getUser().password.email)
-          }, function(){
-            $scope.modal.hide();
-            $state.go('tab.dash');
-          })
-        }
-      })
     }
 })
 
@@ -159,7 +119,6 @@ angular.module('starter.controllers', [])
   $scope.addLocation = function(){
     //open modal for adding location
     $scope.location=!$scope.location;
-    $state.go('tab.add-location');
   };
   
 })

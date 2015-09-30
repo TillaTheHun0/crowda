@@ -2,15 +2,16 @@
 angular.module('starter.services', ['firebase', 'ngResource'])
 
 .factory('Auth', function($resource){
+  var baseUrl = 'http://localhost:3000/api/';
   return{
     login: function(){
-      return $resource('http://localhost:3000/api/login', {}, {
+      return $resource(baseUrl + 'login', {}, {
         'get': {method: 'GET'},
         'post': {method: 'POST'}
       });
     },
     signup: function(){
-      return $resource('http://localhost:3000/api/signup', {}, {
+      return $resource(baseUrl+ 'signup', {}, {
         'post': {method: 'POST'}
       });
     }
@@ -29,7 +30,7 @@ angular.module('starter.services', ['firebase', 'ngResource'])
   //$onAuth listens for changes in authentication state
   firebaseAuth.$onAuth(function(authData){
     if(authData){
-      userData = authData
+      userData = authData;
       console.log("logged in as: " + userData.uid);
     }
     else{
