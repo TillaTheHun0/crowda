@@ -1,7 +1,7 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "firebaseAuth", "firebaseRef", "Spinner", "$state", "$ionicModal", function($scope, firebaseAuth, firebaseRef, Spinner, $state, $ionicModal){
+.controller('LoginCtrl', ["$scope", "firebaseAuth", "firebaseRef", "Spinner", "$state", "$ionicModal", "Auth", function($scope, firebaseAuth, firebaseRef, Spinner, $state, $ionicModal, Auth){
     
     angular.element(document).ready(function(){
       $scope.userData = firebaseAuth.getAuth().$getAuth();
@@ -10,7 +10,8 @@ angular.module('starter.controllers', [])
         $state.go("tab.dash")
       }
     });
-
+    
+    $scope.errorMes = "";
     //ionicModal
     $ionicModal.fromTemplateUrl('templates/new-user.html', {
       scope: $scope,
@@ -31,24 +32,35 @@ angular.module('starter.controllers', [])
       $state.go('new-user');
     };
     	  
-    $scope.loginUser = function(email, password){
+    $scope.loginUser = function(username, password){
       Spinner.loading();
-      firebaseAuth.getAuth().$authWithPassword({
-        email: email,
-        password: password
-      }).then(function(authData) {
-          $state.go("tab.dash");
-      }).catch(function(error) {
-          console.error("Authentication failed:", error);
+      Auth.login().post({username: username, password: password},
+        function(value, responseHeaders){
+          firebaseAuth.getAuth().$authWithCustomToken(value.token)
+            .then(
+              function(authData){
+                Spinner.hideLoading();
+                $state.go("tab.dash");
+              })
+            .catch(
+              function(error){
+                console.log(error);
+              });
+        },
+        function(httpResponse){
           Spinner.hideLoading();
-      })
+          console.log("Authentication failed" + httpResponse.data);
+          $scope.errorMes = "Invalid username and/or password";
+          $scope.error = true;
+        }
+      );
     };
     
   }
 ])
 
-.controller('NewUserCtrl', function($scope, $state, firebaseRef, firebaseAuth, Spinner, $ionicModal){
-  
+.controller('NewUserCtrl', function($scope, $state, firebaseRef, firebaseAuth, Spinner, $ionicModal, Auth){
+    
     $ionicModal.fromTemplateUrl('templates/username.html', {
       scope: $scope,
       animation: 'zoomInUp',   
@@ -62,24 +74,39 @@ angular.module('starter.controllers', [])
     
     $scope.createUser = function(email, username, password){
       Spinner.loading();
-      firebaseAuth.getAuth().$createUser({
-        email: email,
-        password: password
-      }).then(function(auth){
-        console.log("Created user with uid: " + auth.uid);
-        firebaseAuth.getAuth().$authWithPassword({
-          email: email,
-          password: password
-        }).then(function(auth){
-          //pop up modal for user name here
+      Auth.signup().post({username: username, password: password, email: email, provider: "password"},
+        function(value, responseHeaders){
+          $state.go('login');
+        },
+        function(httpResponse){
           Spinner.hideLoading();
-          $scope.modal.show();
+          console.log("Failed to create account: " + httpResponse.data.error);
+          $scope.errorMes = httpResponse.data.error;
+          $scope.error = true
         })
-      }).catch(function(error){
-        $scope.emailTaken = true;
-        Spinner.hideLoading();
-      })
-    };//end createUser
+    }
+    
+    // //TODO: reqrite all of this
+    // $scope.createUser = function(email, username, password){
+    //   Spinner.loading();
+    //   firebaseAuth.getAuth().$createUser({
+    //     email: email,
+    //     password: password
+    //   }).then(function(auth){
+    //     console.log("Created user with uid: " + auth.uid);
+    //     firebaseAuth.getAuth().$authWithPassword({
+    //       email: email,
+    //       password: password
+    //     }).then(function(auth){
+    //       //pop up modal for user name here
+    //       Spinner.hideLoading();
+    //       $scope.modal.show();
+    //     })
+    //   }).catch(function(error){
+    //     $scope.emailTaken = true;
+    //     Spinner.hideLoading();
+    //   })
+    // };//end createUser
     
     $scope.addUser = function(username){
       var auth = firebaseAuth.getUser();
@@ -132,6 +159,7 @@ angular.module('starter.controllers', [])
   $scope.addLocation = function(){
     //open modal for adding location
     $scope.location=!$scope.location;
+    $state.go('tab.add-location');
   };
   
 })

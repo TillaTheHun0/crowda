@@ -1,5 +1,21 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
-angular.module('starter.services', ['firebase'])
+angular.module('starter.services', ['firebase', 'ngResource'])
+
+.factory('Auth', function($resource){
+  return{
+    login: function(){
+      return $resource('http://localhost:3000/api/login', {}, {
+        'get': {method: 'GET'},
+        'post': {method: 'POST'}
+      });
+    },
+    signup: function(){
+      return $resource('http://localhost:3000/api/signup', {}, {
+        'post': {method: 'POST'}
+      });
+    }
+  }
+})
 
 .factory('firebaseRef', ['$firebaseAuth', function($firebaseAuth){
     return new Firebase("https://crowda.firebaseio.com/");
@@ -13,7 +29,7 @@ angular.module('starter.services', ['firebase'])
   //$onAuth listens for changes in authentication state
   firebaseAuth.$onAuth(function(authData){
     if(authData){
-      userData = authData//setup user data here. May make super factory ie firebase endpoint service
+      userData = authData
       console.log("logged in as: " + userData.uid);
     }
     else{

@@ -5,12 +5,14 @@
         <input type="text" placeholder="Email" ng-model="email">
       </label>
       <label class="item item-input">
+        <input type="text" placeholder="Username" ng-model="username">
+      </label>
+      <label class="item item-input">
         <input type="password" placeholder="Password" ng-model="password">
       </label>
       <button class="button button-block button-dark" ng-click="createUser(email, username, password)">Create</button>
     </div>
-    <p ng-show="emailTaken">Email is already in use</p>
-    <p ng-show="usernameTaken">Username is already in user</p>
+    <h2 ng-show="error">{{errorMes}}</h2>
   </ion-content>
 </ion-view>
 
