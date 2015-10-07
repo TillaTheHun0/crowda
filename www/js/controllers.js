@@ -1,8 +1,8 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "firebaseAuth", "Spinner", "$state", "$ionicModal", "Auth", 
-  function($scope, firebaseAuth, Spinner, $state, $ionicModal, Auth){
+.controller('LoginCtrl', ["$scope", "firebaseAuth", "Spinner", "$state", "$ionicModal", "REST", 
+  function($scope, firebaseAuth, Spinner, $state, $ionicModal, REST){
     
     angular.element(document).ready(function(){
       $scope.userData = firebaseAuth.getAuth().$getAuth();
@@ -35,7 +35,7 @@ angular.module('starter.controllers', [])
     	  
     $scope.loginUser = function(username, password){
       Spinner.loading();
-      Auth.login().post({username: username, password: password},
+      REST.login().post({username: username, password: password},
         function(value, responseHeaders){
           firebaseAuth.getAuth().$authWithCustomToken(value.token)
             .then(
@@ -60,7 +60,7 @@ angular.module('starter.controllers', [])
   }
 ])
 
-.controller('NewUserCtrl', function($scope, $state, Spinner, $ionicModal, Auth){
+.controller('NewUserCtrl', function($scope, $state, Spinner, $ionicModal, REST){
     
     $ionicModal.fromTemplateUrl('templates/username.html', {
       scope: $scope,
@@ -75,7 +75,7 @@ angular.module('starter.controllers', [])
     
     $scope.createUser = function(email, username, password){
       Spinner.loading();
-      Auth.signup().post({username: username, password: password, email: email, provider: "password"},
+      REST.signup().post({username: username, password: password, email: email, provider: "password"},
         function(value, responseHeaders){
           $state.go('login');
         },
@@ -88,9 +88,14 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('DashCtrl', function($scope, $state) {
+.controller('DashCtrl', function($scope, $state, REST) {
+  REST.events().get().$promise.then(function(data) {
+    console.log(JSON.stringify(data.events));
+    $scope.events = data.events; 
+  });
   $scope.newEvent = function(){
     $state.go('tab.new-event');
+   
   };
 })
 
