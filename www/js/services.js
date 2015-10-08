@@ -1,7 +1,7 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.services', ['firebase', 'ngResource'])
 
-.factory('Auth', function($resource){
+.factory('REST', function($resource){
   var baseUrl = 'http://localhost:3000/api/';
   return{
     login: function(){
@@ -13,6 +13,11 @@ angular.module('starter.services', ['firebase', 'ngResource'])
     signup: function(){
       return $resource(baseUrl+ 'signup', {}, {
         'post': {method: 'POST'}
+      });
+    },
+    events: function(){
+      return $resource(baseUrl+ 'events', {}, {
+        'get': {method: 'GET'}
       });
     }
   }
