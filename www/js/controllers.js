@@ -73,9 +73,9 @@ angular.module('starter.controllers', [])
       return email.replace('.', ',');
     };
     
-    $scope.createUser = function(email, username, password){
+    $scope.createUser = function(email, username, password, first, last){
       Spinner.loading();
-      REST.signup().post({username: username, password: password, email: email, provider: "password"},
+      REST.signup().post({username: username, password: password, email: email, provider: "password", first: first, last: last},
         function(value, responseHeaders){
           $state.go('login');
         },
