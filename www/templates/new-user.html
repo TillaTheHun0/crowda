@@ -1,6 +1,14 @@
 <ion-view view-title="New Account">
   <ion-content class = "padding">
     <div class = "list">
+      <div class="item item-divider">Name</div>
+      <label class="item item-input">
+        <input type="text" placeholder="First" ng-model="first">
+      </label>
+      <label class="item item-input">
+        <input type="password" placeholder="Last" ng-model="last">
+      </label>
+      <div class="item item-divider">Profile</div>
       <label class="item item-input">
         <input type="text" placeholder="Email" ng-model="email">
       </label>
@@ -10,7 +18,7 @@
       <label class="item item-input">
         <input type="password" placeholder="Password" ng-model="password">
       </label>
-      <button class="button button-block button-dark" ng-click="createUser(email, username, password)">Create</button>
+      <button class="button button-block button-dark" ng-click="createUser(email, username, password, first, last)">Create</button>
     </div>
     <h2 ng-show="error">{{errorMes}}</h2>
   </ion-content>
