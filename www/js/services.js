@@ -16,7 +16,7 @@ angular.module('starter.services', ['firebase', 'ngResource'])
       });
     },
     events: function(){
-      return $resource(baseUrl+ 'events', {}, {
+      return $resource(baseUrl+ 'Events', {}, {
         'get': {method: 'GET'}
       });
     }
@@ -70,67 +70,92 @@ angular.module('starter.services', ['firebase', 'ngResource'])
     }
 }])
 
-.factory('Friends', function(firebaseRef, $firebaseArray, firebaseAuth){
-  return $firebaseArray(firebaseRef.child('users').child(firebaseAuth.getUser().uid).child('friends'));
-})
-
 .factory('Events', function($firebaseArray, firebaseRef){ //grab events for current user. Maybe use to see ther users events?
   /*
   Schema for Event:
-  {
-    name: String,
-    img: image,
-    location: {
-      long: num,
-      lat: num
-    },
-    date: date,
-    goal: currency,
-    current: currency,
-    attendees:[users], //will have to implement synchronized array methods here
-    url: String
-  }
+      {
+        "$event_id":{
+            "name": "string",
+            "description": "string",
+            "createDt": "Date",
+            "dateOf": "Date",
+            "goal": "currency",
+            "cur": "currency",
+            "admin":["$username"],
+            "location":{
+                "lat": "number",
+                "long": "number",
+                "address": "string"
+            },
+            "members":[
+                {
+                    "$username":{
+                        "status": "statusEnum || string",
+                        "text": "string"
+                    }
+                }
+            ],
+            "picture": "url????",//any ideas?
+            "private": "boolean"
+        }
+      }
   */
   var events = [
     {
-      name: 'Team outing to Velocity Air Sports',
-      img: 'http://www.velocityairsports.com/images/VelocityAirSports_logo.jpg',//user would upload image
-      location:{//probably wont need to use this rn
-        long: 123,
-        lat:321
-      },
-      date: "08/25/15 7:00 PM EST",//could be date object instead.
-      goal: 250,
-      current: 120,
-      attendees: ['bruce@gmail.com', 'tyler@mail.com'], //could be usernames later
-      url: 'http://giphy.com/search/nicholas-cage' //url to event page
-    },
-    {
-      name: 'Movies',
-      img: 'http://static.boydgaming.net/samstownlv10/media/gallery/ST_Entertain-Movie_Theater-375347-full.jpg',
-      location:{//probably wont need to use this rn
-        long: 123,
-        lat:321
-      },
-      date: "09/16/15 10:00 PM EST",//could be date object instead.
-      goal: 75,
-      current: 16,
-      attendees: ['bruce@gmail.com', 'malin@gmail.com'], //could be usernames later
-      url: 'http://giphy.com/search/nicholas-cage' //url to event page
-    },
-    {
-      name: 'Bonaroo',
-      img: 'http://www.bonnaroo.com/sites/default/files/content-files/images/broo-fb.jpg?123',
-      location:{//probably wont need to use this rn
-        long: 123,
-        lat:321
-      },
-      date: "06/24/16 7:00 PM EST",//could be date object instead.
-      goal: 400,
-      current: 66,
-      attendees: ['bruce@gmail.com', 'malin@gmail.com'], //could be usernames later
-      url: 'http://giphy.com/search/nicholas-cage' //url to event page
-    }
+          "name": "Fragile Masculinity",
+          "description": "An event for men",
+          "createDt": "2015-05-05",
+          "dateOf": "2015-05-07",
+          "goal": "1000.00",
+          "cur": "20.00",
+          "admin":["$username"],
+          "location":{
+              "lat": "32.90011",
+              "long": "-79.91577799999999",
+              "address": "2387 Clements Ferry Rd, Charleston, SC 29492, United States"
+          },
+          "members":[
+              {
+                  "$username":{
+                      "status": "yes",
+                      "text": "Sure, I guess..."
+                  }
+              }
+          ],
+          "picture": "https://derpiboo.ru/dis/mojo-jojo-thread",
+          "private": "true"
+      }
+      ,
+      {
+          "name": "Mojo Failed",
+          "description": "That sounds like a personal problem",
+          "createDt": "2015-04-05",
+          "dateOf": "2016-05-07",
+          "goal": "10300.00",
+          "cur": "2054.00",
+          "admin":["$username"],
+          "location":{
+              "lat": "32.90011",
+              "long": "-79.91577799999999",
+              "address": "2387 Clements Ferry Rd, Charleston, SC 29492, United States"
+          },
+          "members":[
+              {
+                  "$username":{
+                      "status": "no",
+                      "text": "No, I guess..."
+                  }
+              },
+              {
+                  "$username":{
+                      "status": "maybe",
+                      "text": "Not sure, I guess..."
+                  }
+              }
+          ],
+          "picture": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS47Eb_CSgq_QShwJgeBKgiKR_RBzKM1ADuzFBalCbSaXVALEfmi8YOIQ",
+          "private": "false"
+      }
   ];
   
   return { //will actually be wrappers of firebase calls, but for now this will work
