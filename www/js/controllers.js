@@ -13,7 +13,6 @@ angular.module('starter.controllers', [])
     });
     
     $scope.errorMes = "";
-    //ionicModal
     $ionicModal.fromTemplateUrl('templates/new-user.html', {
       scope: $scope,
       animation: 'slide-in-up'
@@ -147,16 +146,14 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function(Friends, firebaseAuth, $state, $scope) {
+.controller('AccountCtrl', function(firebaseAuth, $state, $scope) {
   $scope.settings = {
     enableFriends: true
   };
   
-   $scope.logoutUser = function(){
-      firebaseAuth.unauth();
-      $state.go("login");
-    };
+  $scope.logoutUser = function(){
+    firebaseAuth.unauth();
+    $state.go("login");
+  };
     
-   $scope.friends = Friends;
-   console.log($scope.friends);
 });

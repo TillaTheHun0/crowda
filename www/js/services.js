@@ -19,8 +19,56 @@ angular.module('starter.services', ['firebase', 'ngResource'])
       return $resource(baseUrl+ 'events', {}, {
         'get': {method: 'GET'}
       });
+    },
+    payment: function(){
+      return $resource(baseUrl+ 'payment', {username:'@username'}, {
+        'get': {method: 'GET', isArray:false}
+      });
     }
   }
+})
+
+.factory('braintree', function(REST){
+  var $braintree = {};
+  
+  $braintree.clientToken = null;
+
+  Object.keys(braintree).forEach(function(key) {
+    console.log(key);
+    $braintree[key] = braintree[key];
+  });
+  
+  function getClientToken(params, success, error) {
+    return REST.payment().get(params, success, error);
+  }
+
+  $braintree.getClientToken = function() {
+    return getClientToken();
+  };
+
+  $braintree.setupDropin = function(options) {
+    getClientToken({username: 'tylerhall'},
+    function(value, responseHeaders){
+      console.log(value.token);
+      braintree.setup(value.token, 'dropin', options);
+      console.log('success');
+    },
+    function(httpResponse){
+      console.log(httpResponse.data.error);
+    });
+  };
+
+  $braintree.setupPayPal = function(options) {
+    getClientToken()
+      .success(function(token) {
+        braintree.setup(token, 'paypal', options);
+      })
+      .error(function(data, status) {
+        console.error('error fetching client token ' + data, status);
+      });
+  };
+
+  return $braintree;
 })
 
 .factory('firebaseRef', ['$firebaseAuth', function($firebaseAuth){
