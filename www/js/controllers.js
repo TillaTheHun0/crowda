@@ -1,7 +1,7 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "firebaseAuth", "Spinner", "$state", "$ionicModal", "REST", "firebaseRef", 
+.controller('LoginCtrl', ["$scope", "firebaseAuth", "Spinner", "$state", "$ionicModal", "REST", "firebaseRef",
   function($scope, firebaseAuth, Spinner, $state, $ionicModal, REST){
     
     angular.element(document).ready(function(){
@@ -88,9 +88,9 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('DashCtrl', function($scope, $state, REST, Events, firebaseRef) {
+.controller('DashCtrl', function($scope, $state, REST, firebaseRef) {
   //Get event data
-  REST.events().get(
+  REST.events().get( 
     function(value, responseHeaders) {
       $scope.events = value; 
     },
