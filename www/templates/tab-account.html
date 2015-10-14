@@ -10,9 +10,9 @@
       <ion-toggle  ng-model="settings.enableFriends">
           Enable Friends
       </ion-toggle>
-      <ion-item ng-repeat="friend in friends">
-        {{friend.$value}}
-      </ion-item>
+      <form id="paypal-setup">
+        <braintree-dropin>Loading...</braintree-dropin>
+      </form>
     </ion-list>
   </ion-content>
 </ion-view>
