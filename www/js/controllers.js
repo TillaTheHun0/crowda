@@ -1,7 +1,7 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', ["$scope", "firebaseAuth", "Spinner", "$state", "$ionicModal", "REST", 
+.controller('LoginCtrl', ["$scope", "firebaseAuth", "Spinner", "$state", "$ionicModal", "REST", "firebaseRef",
   function($scope, firebaseAuth, Spinner, $state, $ionicModal, REST){
     
     angular.element(document).ready(function(){
@@ -88,14 +88,19 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('DashCtrl', function($scope, $state, REST) {
-  REST.events().get().$promise.then(function(data) {
-    console.log(JSON.stringify(data.events));
-    $scope.events = data.events; 
-  });
+.controller('DashCtrl', function($scope, $state, REST, firebaseRef) {
+  //Get event data
+  REST.events().get( 
+    function(value, responseHeaders) {
+      $scope.events = value; 
+    },
+    function(httpResponse){
+      console.log(httpResponse.data); 
+    }
+  );
+  
   $scope.newEvent = function(){
     $state.go('tab.new-event');
-   
   };
 })
 
@@ -156,7 +161,4 @@ angular.module('starter.controllers', [])
       firebaseAuth.unauth();
       $state.go("login");
     };
-    
-   $scope.friends = Friends;
-   console.log($scope.friends);
 });
