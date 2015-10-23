@@ -1,6 +1,8 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.services', ['firebase', 'ngResource'])
 
+//=========API Services=========//
+
 .factory('REST', function($resource){
   var baseUrl = 'http://localhost:3000/api/';
   return{
@@ -27,6 +29,9 @@ angular.module('starter.services', ['firebase', 'ngResource'])
     }
   }
 })
+
+
+//===========Payment Services===========//
 
 .factory('braintree', function(REST){
   var $braintree = {};
@@ -71,6 +76,8 @@ angular.module('starter.services', ['firebase', 'ngResource'])
   return $braintree;
 })
 
+//=======Firebase Services=========//
+
 .factory('firebaseRef', ['$firebaseAuth', function($firebaseAuth){
     return new Firebase("https://crowda.firebaseio.com/");
   }
@@ -103,6 +110,7 @@ angular.module('starter.services', ['firebase', 'ngResource'])
   }
 })
 
+//=========Utility Services==========//
 .factory('Spinner', ['$ionicLoading', function($ionicLoading){   
     return {
       loading: function(){

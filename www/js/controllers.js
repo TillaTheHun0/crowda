@@ -87,6 +87,13 @@ angular.module('starter.controllers', [])
     }
 })
 
+.controller('ProfileCtrl', function($scope, $state){
+  //logic here
+  $scope.account = function(){
+    $state.go('tab.account');
+  }
+})
+
 .controller('DashCtrl', function($scope, $state, REST, firebaseRef) {
   //Get event data
   REST.events().get( 
@@ -156,6 +163,7 @@ angular.module('starter.controllers', [])
     enableFriends: true
   };
    $scope.logoutUser = function(){
+     //clean out caches and what not
       firebaseAuth.unauth();
       $state.go("login");
     };
