@@ -3,15 +3,30 @@
 	<ion-nav-buttons side="right">
 		<button ng-click="account()" class="button button-icon icon ion-ios-gear"></button>
 	</ion-nav-buttons>
-  
-  <!--talk to joe and pepper and brian about design-->
+	
 	<ion-content>
-		<div id="content">
-			<div id = "info">
-				
+		<div class="list">
+			<!--make this better. may center the image?-->
+			<div class="item item-thumbnail-left item-text-wrap">
+				<img class="profile-pic" src="https://avatars3.githubusercontent.com/u/8246360">
+				<h2>Tyler Hall</h2>
+				<p>This is my description asfdisda a;ifjaw aw;lefkj</p>
+				<button ng-show="isViewingSelf" class="button button-small button-block">Edit Profile</button>
 			</div>
-			<div id="events">
-				
+			<div class="item">
+				<div class="button-bar">
+					<a class="button button-clear button-dark icon ion-ios-people">Crowds</a>
+					<a class="button button-clear button-dark icon ion-ios-person">Friends</a>
+				</div>
+			</div>
+			<!--<div class="item item-divider"></div>-->
+			<div class= "card">
+				<div class="item item-divider">Upcoming</div>
+				<div class="item item-body">
+					<div>
+					You have <b>29</b> meetings on your calendar tomorrow.
+					</div>
+				</div>
 			</div>
 		</div>
 	</ion-content>

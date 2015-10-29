@@ -24,3 +24,28 @@
         -ms-transform: translate(0, -100%);
             transform: translate(0, -100%);
 }
+
+#name{
+  vertical-align: text-bottom;
+}
+
+#description{
+  display: inline-block;
+}
+
+.profile-info{
+  display: inline-block;
+  width: 100%;
+  height: 100px;
+}
+.profile-info img{
+  margin: 0 10px 0 0;
+  position: relative;
+  border-radius: 50%;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.profile-pic{
+  border-radius: 50%;
+}
