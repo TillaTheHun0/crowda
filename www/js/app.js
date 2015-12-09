@@ -102,6 +102,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
   
+  .state('tab.friends', {
+    url: '/friends',
+    views: {
+      'tab-profile': {
+        templateUrl: 'templates/profile-friends.html',
+        controller:'ProfileCtrl'
+      }
+    }
+  })
+  
   .state('tab.account', {
     url: '/profile/account',
     views: {

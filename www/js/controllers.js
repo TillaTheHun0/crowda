@@ -87,11 +87,18 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('ProfileCtrl', function($scope, $state){
+.controller('ProfileCtrl', function($scope, $state, $firebaseArray, firebaseRef){
   //logic here
   $scope.account = function(){
     $state.go('tab.account');
   }
+  
+  $scope.viewFriends = function(){
+    $state.go('tab.friends');
+  }
+  
+  $scope.friends = $firebaseArray(firebaseRef.child('username_lookup'));
+  console.log($scope.friends);
 })
 
 .controller('DashCtrl', function($scope, $state, REST, firebaseRef) {
