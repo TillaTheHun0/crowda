@@ -36,6 +36,7 @@ angular.module('starter.controllers', [])
       Spinner.loading();
       REST.login().post({username: username, password: password},
         function(value, responseHeaders){
+          firebaseAuth.setUser(username);
           firebaseAuth.getAuth().$authWithCustomToken(value.token)
             .then(
               function(authData){
@@ -87,7 +88,7 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('ProfileCtrl', function($scope, $state, $firebaseArray, firebaseRef){
+.controller('ProfileCtrl', function($scope, $state, $firebaseArray, firebaseRef, $rootScope){
   //logic here
   $scope.account = function(){
     $state.go('tab.account');
@@ -99,6 +100,7 @@ angular.module('starter.controllers', [])
   
   $scope.friends = $firebaseArray(firebaseRef.child('username_lookup'));
   console.log($scope.friends);
+  console.log($rootScope.globals.username);
 })
 
 .controller('DashCtrl', function($scope, $state, REST, firebaseRef) {

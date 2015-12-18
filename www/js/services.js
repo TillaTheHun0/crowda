@@ -83,16 +83,20 @@ angular.module('starter.services', ['firebase', 'ngResource'])
   }
 ])
 
-.factory('firebaseAuth', function($firebaseAuth, firebaseRef){
+.factory('firebaseAuth', function($firebaseAuth, firebaseRef, $rootScope){
   var firebaseAuth = $firebaseAuth(firebaseRef);
-  var userData = {};
-  var username="";
   
+  function setCredentials(username){
+    $rootScope.globals = {
+        username: username
+        //more to come here maybe
+     }
+  };
   //$onAuth listens for changes in authentication state
   firebaseAuth.$onAuth(function(authData){
     if(authData){
-      userData = authData;
-      console.log("Already authenticated. Logged in as: " + userData.uid);
+      console.log("Already authenticated. Logged in as: " + authData.uid);
+      setCredentials(authData.uid);
     }
     else{
       console.log("logged out");
@@ -105,12 +109,7 @@ angular.module('starter.services', ['firebase', 'ngResource'])
     unauth: function(){
       firebaseAuth.$unauth();
     },
-    getUser: function(){
-      return username;
-    },
-    setUser: function(username){
-      this.username = username;
-    }
+    setCredentials: setCredentials
   }
 })
 
