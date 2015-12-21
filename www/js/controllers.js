@@ -36,7 +36,6 @@ angular.module('starter.controllers', [])
       Spinner.loading();
       REST.login().post({username: username, password: password},
         function(value, responseHeaders){
-          firebaseAuth.setUser(username);
           firebaseAuth.getAuth().$authWithCustomToken(value.token)
             .then(
               function(authData){
@@ -101,6 +100,28 @@ angular.module('starter.controllers', [])
   $scope.friends = $firebaseArray(firebaseRef.child('username_lookup'));
   console.log($scope.friends);
   console.log($rootScope.globals.username);
+})
+
+.controller('FriendsCtrl', function($rootScope, $scope, $firebaseArray, firebaseRef){
+    //grab username from rootScope to use in URL
+    var username = $rootScope.globals.username;
+    
+    //AngularFire $firebase Array object
+    $scope.friends = $firebaseArray(firebaseRef.child('users').child(username).child('friends'));
+    
+    console.log($scope.friends);
+    
+    //TODO: add manipulator wrappers here
+})
+
+.controller('EventsCtrl', function($rootScope, $scope, $firebaseArray, firebaseRef){
+    var username = $rootScope.globals.username;
+    
+    $scope.events = $firebaseArray(firebaseRef.child('users').child(username).child('events'));
+    
+    //console.log($scope.events);
+    
+    //TODO: add manipulator wrappers here
 })
 
 .controller('DashCtrl', function($scope, $state, REST, firebaseRef) {

@@ -1,0 +1,6 @@
+<ion-list ng-controller="FriendsCtrl">
+     <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="friend in friends" type="item-text-wrap">
+        <img ng-src="{{friend.pic}}">
+        <h2>{{friend.username}}</h2>
+    </ion-item>
+</ion-list>

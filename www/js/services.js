@@ -78,10 +78,9 @@ angular.module('starter.services', ['firebase', 'ngResource'])
 
 //=======Firebase Services=========//
 
-.factory('firebaseRef', ['$firebaseAuth', function($firebaseAuth){
+.factory('firebaseRef', function(){
     return new Firebase("https://crowda.firebaseio.com/");
-  }
-])
+})
 
 .factory('firebaseAuth', function($firebaseAuth, firebaseRef, $rootScope){
   var firebaseAuth = $firebaseAuth(firebaseRef);
