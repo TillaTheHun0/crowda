@@ -1,10 +1,4 @@
 <ion-view view-title="Account">
-
-  <!-- nav bar button -->
-  <ion-nav-buttons side= "right">
-    <button class= "button button-clear" ng-click="logoutUser()">Logout</button>
-  </ion-nav-buttons>
-  
   <ion-content>
     <ion-list>
       <ion-toggle  ng-model="settings.enableFriends">
@@ -13,6 +7,8 @@
       <form id="paypal-setup">
         <braintree-dropin>Loading...</braintree-dropin>
       </form>
+      <ion-item class="item-divider"></ion-item>
+      <ion-item ng-click="logoutUser()">Logout</ion-item>
     </ion-list>
   </ion-content>
 </ion-view>

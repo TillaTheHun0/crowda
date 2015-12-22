@@ -1,6 +1,8 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('starter.services', ['firebase', 'ngResource'])
 
+//=========API Services=========//
+
 .factory('REST', function($resource){
   var baseUrl = 'http://localhost:3000/api/';
   return{
@@ -27,6 +29,9 @@ angular.module('starter.services', ['firebase', 'ngResource'])
     }
   }
 })
+
+
+//===========Payment Services===========//
 
 .factory('braintree', function(REST){
   var $braintree = {};
@@ -71,20 +76,26 @@ angular.module('starter.services', ['firebase', 'ngResource'])
   return $braintree;
 })
 
-.factory('firebaseRef', ['$firebaseAuth', function($firebaseAuth){
-    return new Firebase("https://crowda.firebaseio.com/");
-  }
-])
+//=======Firebase Services=========//
 
-.factory('firebaseAuth', function($firebaseAuth, firebaseRef){
+.factory('firebaseRef', function(){
+    return new Firebase("https://crowda.firebaseio.com/");
+})
+
+.factory('firebaseAuth', function($firebaseAuth, firebaseRef, $rootScope){
   var firebaseAuth = $firebaseAuth(firebaseRef);
-  var userData = {};
   
+  function setCredentials(username){
+    $rootScope.globals = {
+        username: username
+        //more to come here maybe
+     }
+  };
   //$onAuth listens for changes in authentication state
   firebaseAuth.$onAuth(function(authData){
     if(authData){
-      userData = authData;
-      console.log("logged in as: " + userData.uid);
+      console.log("Already authenticated. Logged in as: " + authData.uid);
+      setCredentials(authData.uid);
     }
     else{
       console.log("logged out");
@@ -94,15 +105,14 @@ angular.module('starter.services', ['firebase', 'ngResource'])
     getAuth: function(){
       return firebaseAuth;
     },
-    getUser: function(){
-      return userData;
-    },
     unauth: function(){
       firebaseAuth.$unauth();
-    }
+    },
+    setCredentials: setCredentials
   }
 })
 
+//=========Utility Services==========//
 .factory('Spinner', ['$ionicLoading', function($ionicLoading){   
     return {
       loading: function(){

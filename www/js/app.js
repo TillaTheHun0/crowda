@@ -91,12 +91,32 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       }
     })
-
-  .state('tab.account', {
-    url: '/account',
+  
+  .state('tab.profile', {
+    url: '/profile',
     views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
+      'tab-profile': {
+        templateUrl: 'templates/tab-profile.html',
+        controller:'ProfileCtrl'
+      }
+    }
+  })
+  
+  .state('tab.friends', {
+    url: '/friends',
+    views: {
+      'tab-profile': {
+        templateUrl: 'templates/profile-friends.html',
+        controller:'ProfileCtrl'
+      }
+    }
+  })
+  
+  .state('tab.account', {
+    url: '/profile/account',
+    views: {
+      'tab-profile': {
+        templateUrl: 'templates/account.html',
         controller: 'AccountCtrl'
       }
     }

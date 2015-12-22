@@ -87,6 +87,43 @@ angular.module('starter.controllers', [])
     }
 })
 
+.controller('ProfileCtrl', function($scope, $state, $firebaseArray, firebaseRef, $rootScope){
+  //logic here
+  $scope.account = function(){
+    $state.go('tab.account');
+  }
+  
+  $scope.viewFriends = function(){
+    $state.go('tab.friends');
+  }
+  
+  $scope.friends = $firebaseArray(firebaseRef.child('username_lookup'));
+  console.log($scope.friends);
+  console.log($rootScope.globals.username);
+})
+
+.controller('FriendsCtrl', function($rootScope, $scope, $firebaseArray, firebaseRef){
+    //grab username from rootScope to use in URL
+    var username = $rootScope.globals.username;
+    
+    //AngularFire $firebase Array object
+    $scope.friends = $firebaseArray(firebaseRef.child('users').child(username).child('friends'));
+    
+    console.log($scope.friends);
+    
+    //TODO: add manipulator wrappers here
+})
+
+.controller('EventsCtrl', function($rootScope, $scope, $firebaseArray, firebaseRef){
+    var username = $rootScope.globals.username;
+    
+    $scope.events = $firebaseArray(firebaseRef.child('users').child(username).child('events'));
+    
+    //console.log($scope.events);
+    
+    //TODO: add manipulator wrappers here
+})
+
 .controller('DashCtrl', function($scope, $state, REST, firebaseRef) {
   //Get event data
   REST.events().get( 
@@ -156,6 +193,7 @@ angular.module('starter.controllers', [])
     enableFriends: true
   };
    $scope.logoutUser = function(){
+     //clean out caches and what not
       firebaseAuth.unauth();
       $state.go("login");
     };
