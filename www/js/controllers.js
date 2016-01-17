@@ -13,14 +13,7 @@ angular.module('starter.controllers', [])
     });
     
     $scope.errorMes = "";
-    $ionicModal.fromTemplateUrl('templates/new-user.html', {
-      scope: $scope,
-      animation: 'slide-in-up'
-    }).then(function(modal) {
-      $scope.modal = modal;
-    });
-    
-    
+   
     function goToDash(error){
       console.log("done");
       Spinner.hideLoading();
@@ -60,14 +53,6 @@ angular.module('starter.controllers', [])
 ])
 
 .controller('NewUserCtrl', function($scope, $state, Spinner, $ionicModal, REST){
-    
-    $ionicModal.fromTemplateUrl('templates/username.html', {
-      scope: $scope,
-      animation: 'zoomInUp',   
-    }).then(function(modal){
-      $scope.modal = modal;
-    })
-  
     function escapeEmail(email){
       return email.replace('.', ',');
     };
@@ -87,79 +72,55 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('ProfileCtrl', function($scope, $state, $firebaseArray, firebaseRef, $rootScope){
+.controller('ProfileCtrl', function($scope, $state, FriendService, $ionicModal){
+    
+    $ionicModal.fromTemplateUrl('templates/modals/profile-friends.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal){
+        $scope.modal = modal;
+    });
+    
   //logic here
   $scope.account = function(){
     $state.go('tab.account');
   }
   
   $scope.viewFriends = function(){
-    $state.go('tab.friends');
+    $scope.modal.show();
   }
   
-  $scope.friends = $firebaseArray(firebaseRef.child('username_lookup'));
+  $scope.friends = FriendService;
   console.log($scope.friends);
-  console.log($rootScope.globals.username);
 })
 
-.controller('FriendsCtrl', function($rootScope, $scope, $firebaseArray, firebaseRef){
-    //grab username from rootScope to use in URL
-    var username = $rootScope.globals.username;
-    
-    //AngularFire $firebase Array object
-    $scope.friends = $firebaseArray(firebaseRef.child('users').child(username).child('friends'));
-    
-    console.log($scope.friends);
-    
-    //TODO: add manipulator wrappers here
-})
-
-.controller('EventsCtrl', function($rootScope, $scope, $firebaseArray, firebaseRef){
-    var username = $rootScope.globals.username;
-    
-    $scope.events = $firebaseArray(firebaseRef.child('users').child(username).child('events'));
-    
-    //console.log($scope.events);
-    
-    //TODO: add manipulator wrappers here
-})
-
-.controller('DashCtrl', function($scope, $state, REST, firebaseRef) {
+.controller('DashCtrl', function($scope, $state, REST, EventService) {
   //Get event data
   REST.events().get( 
     function(value, responseHeaders) {
-      $scope.events = value; 
+      $scope.globalEvents = value; 
     },
     function(httpResponse){
       console.log(httpResponse.data); 
     }
   );
   
+  $scope.events = EventService;
+  
   $scope.newEvent = function(){
     $state.go('tab.new-event');
   };
 })
 
-.controller('NewEventCtrl', function($scope, $state, firebaseRef, firebaseAuth, $ionicModal){
+.controller('NewEventCtrl', function($scope, $state){
   $scope.location=false;
-  
-  $scope.invitees=[];
-  $scope.friendQuery=[];
   
   $scope.addUser = function(user){
     $scope.invitees.push(user);
   }
   
-  $scope.getFriends = function(){
-    //firebaseArrays  
-  };
-  
   $scope.cancel= function(){
     $state.go("tab.dash");
-  };
-  
-  $scope.createCrowd = function(){
-    
   };
   
   $scope.addLocation = function(){

@@ -79,7 +79,8 @@ angular.module('starter.services', ['firebase', 'ngResource'])
 //=======Firebase Services=========//
 
 .factory('firebaseRef', function(){
-    return new Firebase("https://crowda.firebaseio.com/");
+    var firebaseRef = new Firebase("https://crowda.firebaseio.com/");
+    return firebaseRef;
 })
 
 .factory('firebaseAuth', function($firebaseAuth, firebaseRef, $rootScope){
@@ -110,6 +111,16 @@ angular.module('starter.services', ['firebase', 'ngResource'])
     },
     setCredentials: setCredentials
   }
+})
+
+.service('FriendService', function(firebaseRef, $firebaseArray, $rootScope){
+    var friends = $firebaseArray(firebaseRef.child('users').child($rootScope.globals.username).child('friends'));
+    return friends;
+})
+
+.service('EventService', function(firebaseRef, $firebaseArray, $rootScope){
+   var events = $firebaseArray(firebaseRef.child('users').child($rootScope.globals.username).child('events'));
+    return events; 
 })
 
 //=========Utility Services==========//
