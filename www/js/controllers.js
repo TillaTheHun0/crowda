@@ -105,7 +105,7 @@ angular.module('starter.controllers', [])
     }
   );
   
-  $scope.events = EventService;
+  $scope.selfEvents = EventService;
   
   $scope.newEvent = function(){
     $state.go('tab.new-event');

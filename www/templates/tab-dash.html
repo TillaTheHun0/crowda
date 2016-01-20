@@ -1,10 +1,19 @@
 <ion-view view-title="Dashboard">
+    <ion-content class="" scroll="false">
+        <div class="tabs-striped tabs-background-dark tabs-color-positive">
+            <div class="item tabs tabs-secondary">
+              <a class="tab-item" ui-sref="tab.dash.global">
+                <i class="icon ion-ios-world"></i>
+              </a>
+              <a class="tab-item" ui-sref="tab.dash.new-event">
+                <i class="icon ion-ios-plus"></i>
+              </a>
+              <a class="tab-item" ui-sref="tab.dash.self">
+                <i class="icon ion-ios-body"></i>
+              </a>
+            </div>
+          </div>  
+    </ion-content>
+    <ui-view name="dash-sub"></ui-view>
   
-  <ion-nav-buttons side="right">
-    <button ng-click="newEvent()" class="button button-icon icon ion-ios-plus-empty"></button>
-  </ion-nav-buttons>
-  
-  <ion-content class="padding">
-    <crowda-list type="events"></crowda-list>
-  </ion-content>
 </ion-view>
