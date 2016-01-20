@@ -62,10 +62,30 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
   
-  .state('tab.new-event', {
+  .state('tab.dash.self', {
+      url: '/dash/self',
+      views: {
+          'dash-sub': {
+              templateUrl: 'templates/tab-dash-self.html',
+              controller: 'DashCtrl'
+          }
+      }
+  })
+  
+    .state('tab.dash.global', {
+      url: '/dash/global',
+      views: {
+          'dash-sub': {
+              templateUrl: 'templates/tab-dash-global.html',
+              controller: 'DashCtrl'
+          }
+      }
+  })
+  
+  .state('tab.dash.new-event', {
     url: '/new-event',
     views:{
-      'tab-dash':{
+      'dash-sub':{
         templateUrl: 'templates/new-event.html',
         controller: 'NewEventCtrl'
       }
