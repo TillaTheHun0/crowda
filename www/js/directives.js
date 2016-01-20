@@ -35,6 +35,9 @@ angular.module('starter.directives', [])
 .directive('crowdaList', function(){
     return {
        restrict: 'E',
+       scope: {
+           data: '='
+       },
        link: function(scope, elem, attrs){
            scope.getTemplateUrl = function(){
                var type = attrs.type;
